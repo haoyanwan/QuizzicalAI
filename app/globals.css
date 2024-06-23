@@ -10,6 +10,13 @@
   }
 }
 
+@layer components {
+  .spinner-border {
+    @apply border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent;
+  }
+}
+
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

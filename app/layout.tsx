@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={" flex min-h-screen bg-f5f5f5"}>
+      <body className={" flex min-h-screen bg-accent-7"}>
         <Sidebar />
         <div className="flex-grow">
           {children} {/* This will be the main content area */}
