@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import QuizPrompt from "./component/quizprompt";
-import AnswerBox from "./component/answerbox";
-import LearningObjectiveChart from "./component/LearningObjectiveChart";
-import RecentPerformanceChart from "./component/performancchart";
-import AssessmentBox from "./component/assesmentbox"; // Import the new component
+import QuizPrompt from "../component/quizprompt";
+import AnswerBox from "../component/answerbox";
+import LearningObjectiveChart from "../component/LearningObjectiveChart";
+import RecentPerformanceChart from "../component/performancchart";
+import AssessmentBox from "../component/assesmentbox";
+import CourseContentDive from "../component/coursecontentdive"; // Import the CourseContentDive component
 
 const Home = () => {
   const [questionData, setQuestionData] = useState(null);
@@ -103,18 +104,7 @@ const Home = () => {
           margin: "1%",
         }}
       >
-        <div>
-          <h2 className="p-4 pb-0 text-2xl font-bold mb-4 text-blue-800">
-            Questions
-          </h2>
-          <QuizPrompt questionData={questionData} loading={loading} />
-        </div>
-        <AnswerBox
-          questionData={questionData}
-          fetchQuestion={fetchQuestion}
-          triggerRefresh={triggerRefresh}
-          onAnswerSubmit={handleAnswerSubmit} // Pass the handleAnswerSubmit callback
-        />
+        <CourseContentDive /> {/* Add the CourseContentDive component here */}
       </div>
     </div>
   );

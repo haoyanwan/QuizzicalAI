@@ -5,7 +5,7 @@ import openai
 import libsql_experimental as libsql
 import json
 import random
-
+import requests
 # Load environment variables
 load_dotenv()
 
@@ -343,6 +343,26 @@ def store_assessment_data(question, answer, knowledge_code, assessment):
     conn.commit()
     cursor.close()
 
+@app.route("/api/weakest_knowledge_point")
+def weakest_knowledge_point():
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT label, knowledge
+    FROM essential_knowledge
+    ORDER BY mastery_score ASC
+    LIMIT 1
+    """)
+    weakest_point = cursor.fetchone()
+    cursor.close()
+
+    if weakest_point:
+        return jsonify({
+            "label": weakest_point[0],
+            "knowledge": weakest_point[1]
+        })
+    else:
+        return jsonify({"error": "No essential knowledge points found"}), 404
+
 
 @app.route("/api/grade_answer", methods=["POST"])
 def grade_answer_route():
@@ -372,6 +392,38 @@ def update_score(knowledge_code, score_change):
     cursor.execute("UPDATE essential_knowledge SET mastery_score = mastery_score + ? WHERE label = ?", (score_change, knowledge_code))
     conn.commit()
     cursor.close()
+
+YOU_API_KEY = os.getenv("YOU_API_KEY")
+
+# Define a new route to query You.com
+@app.route("/api/query_you_com", methods=["POST"])
+def query_you_com():
+    data = request.json
+    knowledge = data.get("knowledge")
+
+    if not knowledge:
+        return jsonify({"error": "Knowledge topic is required"}), 400
+
+    url = "https://chat-api.you.com/research"
+    payload = {
+        "query": f"A student is struggling in the following concepts related to AP Environmental Science: {knowledge}. Please identify different sources to help improve their skills. Try not to include more than one of the same domain name. Focus on results for AP Environmental Science or for similar classes, aimed at high school students. Some ideas are Khan academy, college board, etc.",
+        "chat_id": "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+    }
+    headers = {
+        "X-API-Key": YOU_API_KEY,
+        "Content-Type": "application/json"
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
+# Add other routes and the main entry point as needed...
+
+
 
 @app.route("/api/learning_objectives_scores")
 def learning_objectives_scores():

@@ -2,13 +2,16 @@
 function Sidebar() {
   return (
     <aside className="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
-      <a href="#">
-        <img
-          className="w-auto h-6 sm:h-7"
-          src="https://merakiui.com/images/logo.svg"
-          alt=""
-        />
-      </a>
+      <div className="flex items-center space-x-4">
+        <a href="#">
+          <img
+            className="w-auto h-6 sm:h-7"
+            src="/img/logo.jpg"
+            alt="Quizzical Logo"
+          />
+        </a>
+        <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Quizzical</span>
+      </div>
 
       <div className="relative mt-6">
         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -38,7 +41,7 @@ function Sidebar() {
         <nav>
           <a
             className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md dark:bg-gray-800 dark:text-gray-200"
-            href="#"
+            href="/"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
               <path
@@ -55,7 +58,7 @@ function Sidebar() {
           {/* Additional navigation items */}
           <a
             className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-            href="#"
+            href="Reports"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
               <path
@@ -112,7 +115,7 @@ function Sidebar() {
         <a href="#" className="flex items-center px-4 -mx-2">
           <img
             className="object-cover mx-2 rounded-full h-9 w-9"
-            src="https://media.gettyimages.com/id/1158902075/photo/us-economy-bank-rate.jpg?s=1024x1024&w=gi&k=20&c=tC5_UUmTHgsFTprST_ysO1-7-Kiru6lPBfXK7vr0vew="
+            src="https://www.shutterstock.com/image-photo/joyful-happy-african-american-young-600nw-1470743384.jpg"
             alt="avatar"
           />
           <span className="mx-2 font-medium text-gray-800 dark:text-gray-200">

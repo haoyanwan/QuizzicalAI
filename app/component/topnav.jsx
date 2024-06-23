@@ -4,9 +4,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
+  { name: 'Reports', href: '#', current: false },
+  { name: 'Analytics', href: '#', current: false },
   { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
 ]
 
 function classNames(...classes) {
@@ -35,7 +35,7 @@ export default function Example() {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src="/img/logo.jpg"
                     alt="Your Company"
                   />
                 </div>
@@ -62,7 +62,7 @@ export default function Example() {
                   type="button"
                   className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  <span className="sr-only">View notifications</span>
+                  <span className="sr-only">Reports</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
@@ -70,10 +70,10 @@ export default function Example() {
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <MenuButton className="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                      <span className="sr-only">Open user menu</span>
+                      <span className="sr-only">Analytics</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src="https://www.shutterstock.com/image-photo/joyful-happy-african-american-young-600nw-1470743384.jpg"
                         alt=""
                       />
                     </MenuButton>

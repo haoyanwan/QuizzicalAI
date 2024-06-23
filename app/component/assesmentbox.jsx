@@ -19,7 +19,7 @@ const AssessmentBox = ({ updateAssessment }) => {
 
   return (
     <div className="p-2">
-      <h3 className="text-sm font-semibold mb-2 text-gray-600">Latest Assessment</h3>
+      <h3 className="text-sm font-semibold mb-2 text-blue-800">Latest Assessment</h3>
       <div className="mb-1">
         <strong className="text-xs font-semibold text-gray-600">Strengths:</strong>
         <ul className="list-disc list-inside text-xs text-gray-600 space-y-1">

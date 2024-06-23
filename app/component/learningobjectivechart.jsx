@@ -74,7 +74,7 @@ const LearningObjectiveChart = ({ refresh }) => {
           <div className="text-left text-gray-500 text-xs w-3/4"></div>
           <div className="text-right text-gray-500 text-xs w-16">Progress</div>
         </div>
-        {data.slice(0, 10).map((item, index) => {
+        {data.slice(0, 9).map((item, index) => {
           const primaryColor = getColor(index);
           const lighterColor = getLighterColor(primaryColor);
           const mediumColor = getMediumColor(primaryColor);
