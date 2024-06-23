@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import QuizPrompt from "./component/quizprompt";
 import AnswerBox from "./component/answerbox";
-import LearningObjectiveChart from "./component/LearningObjectiveChart";
+import LearningObjectiveChart from "./component/learningobjectivechart";
 import RecentPerformanceChart from "./component/performancchart";
 import AssessmentBox from "./component/assesmentbox"; // Import the new component
 
