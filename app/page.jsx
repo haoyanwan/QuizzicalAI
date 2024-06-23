@@ -57,8 +57,8 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Top Left Container absolutely positioned */}
-      <div
+    {/* Top Left Container absolutely positioned */}
+    <div
         className="absolute left-0 top-0 p-3 bg-white rounded-lg"
         style={{
           width: "38%",
@@ -72,7 +72,7 @@ const Home = () => {
             src="/img/logo.png"
             alt="AP Environmental Science"
           />
-          <div className="px-2 py-2 flex flex-col justify-center">
+          <div className="px-2 py-2 flex flex-col justify-center bg-gray-100 rounded-lg">
             <div className="font-bold text-lg mb-1">AP Environmental Science</div>
             <p className="text-gray-700 text-sm">
               Explore the impact of human activities on the environment and
