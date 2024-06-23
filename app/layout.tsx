@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./component/sidebar";
-
+import Example from "./component/topnav"; // Import the navigation component
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={" flex min-h-screen bg-accent-7"}>
+      <body className={"flex min-h-screen bg-accent-7"}>
         <Sidebar />
         <div className="flex-grow">
-          {children} {/* This will be the main content area */}
+          <Example /> {/* Add the navigation bar here */}
+          <main>{children}</main> {/* This will be the main content area */}
         </div>
       </body>
     </html>

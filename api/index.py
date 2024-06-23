@@ -169,6 +169,31 @@ The list of essential knowledge points is as follows:
 ONLY output a json file, write ABSOLUTELY nothing else
 """
 
+answer_assessment_prompt = """
+Your job is to assess a student's answer to a question in order to determine if the answer contains any details about the characteristics of the response, specifically focusing on strengths, weaknesses, or habits.
+
+You are part of a team building a knowledge base to assist in highly customized learning plans.
+
+You play the critical role of assessing the message to determine if it contains any information worth recording in the knowledge base.
+
+You are only interested in the following categories of information:
+
+Strengths
+Weaknesses
+Habits
+You will receive the message in the format
+Q: (some question)
+A: (some answer)
+
+When you see the answer, you should determine if the answer contains any information about the characteristics of the response, such as its accuracy, conciseness, depth, clarity, organization, etc.
+
+You should ONLY RESPOND IN JSON FORMAT with STRENGTH, WEAKNESS, and HABITS. Absolutely no other information should be provided.
+
+You should respond in short messages that are adjectives. 
+
+Take a deep breath, think step by step, and then analyze the following message:
+"""
+
 def fetch_essential_knowledge_and_scores():
     cursor = conn.cursor()
     cursor.execute("SELECT label, knowledge, mastery_score FROM essential_knowledge")
@@ -213,6 +238,20 @@ def grade_answer(question, answer, knowledge_code):
     print(grading_response)
     return json.loads(grading_response)
 
+def assess_answer(question, answer):
+    messages = [
+        {"role": "system", "content": answer_assessment_prompt},
+        {"role": "user", "content": f"Q: {question}\nA: {answer}"}
+    ]
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4-turbo",
+        messages=messages,
+        temperature=0.0
+    )
+    assessment_response = response['choices'][0]['message']['content']
+    return json.loads(assessment_response)
+
 # Define a route to generate a question based on essential knowledge code and description
 @app.route("/api/generate_question")
 def generate_question_route():
@@ -244,7 +283,67 @@ def generate_specific_question_route(knowledge_code):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/latest_assessment")
+def latest_assessment():
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT description FROM strengths ORDER BY id DESC LIMIT 1
+    """)
+    latest_strength = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT description FROM weaknesses ORDER BY id DESC LIMIT 1
+    """)
+    latest_weakness = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT description FROM habits ORDER BY id DESC LIMIT 1
+    """)
+    latest_habit = cursor.fetchone()
+    
+    cursor.close()
+
+    if latest_strength or latest_weakness or latest_habit:
+        return jsonify({
+            "strengths": [latest_strength[0]] if latest_strength else [],
+            "weaknesses": [latest_weakness[0]] if latest_weakness else [],
+            "habits": [latest_habit[0]] if latest_habit else []
+        })
+    else:
+        return jsonify({"error": "No assessments found"}), 404
+
+
 # Define a route for grading the answer
+def store_assessment_data(question, answer, knowledge_code, assessment):
+    cursor = conn.cursor()
+    
+    strengths = assessment.get('STRENGTHS', "")
+    weaknesses = assessment.get('WEAKNESS', "")
+    habits = assessment.get('HABITS', "")
+    print(strengths, weaknesses, habits)
+    
+    if strengths:
+        cursor.execute("""
+        INSERT INTO strengths (id, description)
+        VALUES (NULL, ?)
+        """, (strengths,))
+    
+    if weaknesses:
+        cursor.execute("""
+        INSERT INTO weaknesses (id, description)
+        VALUES (NULL, ?)
+        """, (weaknesses,))
+    
+    if habits:
+        cursor.execute("""
+        INSERT INTO habits (id, description)
+        VALUES (NULL, ?)
+        """, (habits,))
+    
+    conn.commit()
+    cursor.close()
+
+
 @app.route("/api/grade_answer", methods=["POST"])
 def grade_answer_route():
     data = request.json
@@ -257,9 +356,14 @@ def grade_answer_route():
 
     try:
         result = grade_answer(question, answer, knowledge_code)
+        assessment = assess_answer(question, answer)
         # Update the mastery score in the database based on the result
         update_score(knowledge_code, result[knowledge_code])
-        return jsonify(result)
+        
+        # Store assessment data in the database
+        store_assessment_data(question, answer, knowledge_code, assessment)
+
+        return jsonify({"result": result, "assessment": assessment})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -268,6 +372,22 @@ def update_score(knowledge_code, score_change):
     cursor.execute("UPDATE essential_knowledge SET mastery_score = mastery_score + ? WHERE label = ?", (score_change, knowledge_code))
     conn.commit()
     cursor.close()
+
+@app.route("/api/learning_objectives_scores")
+def learning_objectives_scores():
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT learning_objectives.label, AVG(essential_knowledge.mastery_score), learning_objectives.description
+    FROM learning_objectives
+    JOIN essential_knowledge ON learning_objectives.id = essential_knowledge.learning_objective_id
+    GROUP BY learning_objectives.label
+    """)
+    results = cursor.fetchall()
+    cursor.close()
+    learning_objectives_scores = [{"learning_objective": row[0], "score": row[1]-1, "descriptions": row[2]} for row in results]
+    return jsonify(learning_objectives_scores)
+
+
 
 # Define a sample route for the Flask app
 @app.route("/api/python")

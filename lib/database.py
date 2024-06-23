@@ -100,7 +100,7 @@ essential_knowledge_data = [
     ('EIN-4.C.6', 'Some ways humans can mitigate the impact of loss of biodiversity include creating protected areas, use of habitat corridors, promoting sustainable land use practices, and restoring lost habitats.', learning_objectives['EIN-4.C'])
 ]
 
-conn.executemany("INSERT OR REPLACE INTO essential_knowledge (label, knowledge, learning_objective_id, mastery_score) VALUES (?, ?, ?, 1);", essential_knowledge_data)
+conn.executemany("INSERT OR REPLACE INTO essential_knowledge (label, knowledge, learning_objective_id, mastery_score) VALUES (?, ?, ?, 5);", essential_knowledge_data)
 
 # Commit the changes
 conn.commit()
